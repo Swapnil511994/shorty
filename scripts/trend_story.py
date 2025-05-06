@@ -52,16 +52,33 @@ def fetch_us_headlines(max_results=10):
 
 # ===== Story Generator using local Mistral =====
 def generate_story(prompt):
+    # system_prompt = (
+    #     "You are an expert content creator who writes short, informative, and engaging scripts for YouTube Shorts.\n"
+    #     "Use the headline and description provided to explain the news clearly and concisely.\n"
+    #     "Avoid adding descriptors like [Music], (Narrator), etc.\n"
+    #     "The script must be under 200 words and understandable by a general audience.\n"
+    #     "End the script with one of the following:\n"
+    #     "- 'Subscribe for more!'\n"
+    #     "- 'Like, share, and subscribe!'\n"
+    #     "Format the script naturally for voiceover narration."
+    # )
+
     system_prompt = (
-        "You are an expert content creator who writes short, informative, and engaging scripts for YouTube Shorts.\n"
-        "Use the headline and description provided to explain the news clearly and concisely.\n"
-        "Avoid adding descriptors like [Music], (Narrator), etc.\n"
-        "The script must be under 100 words and understandable by a general audience.\n"
-        "End the script with one of the following:\n"
-        "- 'Subscribe for more!'\n"
-        "- 'Like, share, and subscribe!'\n"
-        "Format the script naturally for voiceover narration."
+        "You are an expert content creator who writes short, educational, and engaging scripts for YouTube Shorts.\n"
+        "Your goal is to explain news topics clearly and in a way that drives algorithmic reach.\n"
+        "Use the provided headline and description to:\n"
+        "- Clearly explain what the news is about\n"
+        "- Add value by saying what it means or why it matters\n"
+        "- Use terms like 'explained', 'what it means', or 'did you know' to increase search discoverability\n"
+        "- End the script with a CTA: 'Like, share, and subscribe!'\n\n"
+        "Rules:\n"
+        "- The script must be under 200 words\n"
+        "- Write naturally for voice narration\n"
+        "- Do NOT include any descriptors like Here's a YouTube Shorts script about, [Music], (Narrator), no hastags, etc.\n"
+        "- Do NOT include any emojis in the output.\n"
+        "- Format output as clean, spoken text — no title, no headings, just the script"
     )
+
 
     try:
         result = subprocess.run(
