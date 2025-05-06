@@ -20,20 +20,23 @@ def print_status(msg, status="info"):
 # ===== Content Generation =====
 def generate_metadata(story_text):
     system_prompt = (
-        "You are a YouTube Shorts strategist.\n"
-        "Generate metadata in this exact format:\n\n"
+        "You are a YouTube Shorts strategist and SEO expert.\n"
+        "Given a short video script, generate metadata optimized for YouTube and Google search.\n"
+        "Return the result in exactly this format:\n\n"
         "[TITLE]\n"
-        "A catchy title (max 15 words)\n"
+        "A punchy, curiosity-driven title (max 15 words)\n"
         "[DESCRIPTION]\n"
-        "One-sentence teaser ending with or without a question mark\n"
+        "A one-paragraph teaser that ends with a question mark and includes at least one to two keyword\n"
         "[TAGS]\n"
-        "5–8 comma-separated lowercase tags (no hashtags)\n\n"
+        "8-15 comma-separated lowercase keywords (no hashtags)\n\n"
         "Rules:\n"
-        "- Use plain text only\n"
         "- Do not skip or rename any section\n"
-        "- Keep title short and punchy\n"
-        "- Description must end with a question mark"
+        "- Title should include keywords and trigger curiosity\n"
+        "- Tags should include variations (e.g., 'nasa, space, astronomy, science news')\n"
+        "- No formatting or markdown\n"
+        "- Use plain text only"
     )
+
 
     result = subprocess.run(
         ['ollama', 'run', MODEL_NAME, system_prompt + "\n\nSTORY:\n" + story_text],
