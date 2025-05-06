@@ -1,40 +1,44 @@
 1
-00:00:00,031 --> 00:00:03,576
-In today's news, we're looking at a significant development in Sudan.
+00:00:00,031 --> 00:00:00,833
+Attention all!
 
 2
-00:00:04,136 --> 00:00:10,244
-Did you know that for the first time ever, Port Sudan, the wartime capital of the country, has been hit by drone attacks?
+00:00:01,453 --> 00:00:03,677
+Today we’re diving into a breaking news story.
 
 3
-00:00:10,926 --> 00:00:15,391
-This attack on an army-held city signals a worrying escalation in the two-year-long civil war.
+00:00:04,259 --> 00:00:10,351
+Did you know that Port Sudan, Sudan’s wartime capital, has been hit by drone attacks for the first time?
 
 4
-00:00:16,053 --> 00:00:24,704
-The conflict between the Sudanese military and a powerful paramilitary group, the Rapid Support Forces, has been ongoing since October 2021.
+00:00:11,071 --> 00:00:15,339
+This marks a significant escalation in the two-year-long civil war.
 
 5
-00:00:24,684 --> 00:00:29,812
-The use of drone attacks marks a new level of intensity in this already devastating conflict.
+00:00:15,320 --> 00:00:21,728
+Drone strikes on strategic military locations are not a common occurrence in Sudan, making this incident a cause for concern.
 
 6
-00:00:30,513 --> 00:00:31,795
-So why does this matter?
+00:00:22,329 --> 00:00:27,897
+The attack on Port Sudan’s army-held areas raises questions about the intensity and direction this conflict may take.
 
 7
-00:00:32,475 --> 00:00:38,683
-Well, these drone attacks pose a serious threat to civilian safety and could potentially destabilize the region even further.
+00:00:28,518 --> 00:00:29,320
+Why does it matter?
 
 8
-00:00:39,365 --> 00:00:42,768
-It's crucial to stay informed about such developments as they unfold.
+00:00:30,001 --> 00:00:36,450
+Such escalations can lead to more violence, displacement of civilians, and destabilization of the region.
 
 9
-00:00:43,450 --> 00:00:47,756
-Remember to like, share, and subscribe for more updates on global news events.
+00:00:36,429 --> 00:00:40,567
+As global citizens, it’s crucial we stay informed about such developments.
 
 10
-00:00:48,496 --> 00:00:52,262
-Stay tuned as we continue to bring you insights into the world around us.
+00:00:41,290 --> 00:00:46,414
+So, don’t forget to like, share and subscribe for more updates on this evolving story.
+
+11
+00:00:47,055 --> 00:00:49,747
+Let’s keep the conversation going.
 

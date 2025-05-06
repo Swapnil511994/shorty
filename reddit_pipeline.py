@@ -10,7 +10,7 @@ steps = [
     ("Generating Reddit Stories", PY_VIDEO, "scripts/generate_reddit_story.py"),
     ("Generating Metadata", PY_VIDEO, "scripts/generate_metadata_from_story.py"),
     ("Generating Audio", XTTS_VENV, "scripts/generate_xtts_narration.py"),
-    ("Generating Subtitles", PY_VIDEO, "scripts/create_subtitles.py"),
+    ("Generating Subtitles", PY_VIDEO, "scripts/create_ai_subtitles.py"),
     ("Generating Videos", PY_VIDEO, "scripts/generate_video.py"),
     ("Uploading Videos", PY_VIDEO, "scripts/upload_youtube_shorts.py"),
 ]
