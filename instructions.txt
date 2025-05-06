@@ -1,0 +1,1 @@
+python .\cleanup.py --delete-stories --delete-metadata --delete-audio --delete-videos

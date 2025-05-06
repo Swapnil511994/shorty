@@ -151,6 +151,10 @@ os.makedirs(VIDEO_OUTPUT_DIR, exist_ok=True)
 
 # Load CSV
 df = pd.read_csv(CSV_PATH)
+# Ensure required columns exist
+for col in ['VideoStatus', 'VideoPath']:
+    if col not in df.columns:
+        df[col] = "pending"
 
 # Styled Subtitle Generator
 def generate_subtitle(txt):

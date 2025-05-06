@@ -57,7 +57,9 @@ def clean_story(text):
     text = re.sub(r'^(title|script|heading)[:\-–]\s*', '', text, flags=re.IGNORECASE)
     text = re.sub(r'\n{2,}', '\n', text)
     text = re.sub(r' +', ' ', text)
+    text = '\n'.join(line.strip() for line in text.splitlines())  # Trim each line
     return text.strip()
+
 
 # ===== Story Generator =====
 def generate_story(prompt):
@@ -74,6 +76,7 @@ def generate_story(prompt):
         "- Write naturally for voice narration\n"
         "- Do NOT include any descriptors like [Music], (Narrator), no hashtags, etc.\n"
         "- Do NOT include any emojis in the output.\n"
+        "- Do NOT start with Here's your YouTube Shorts script: or any other informative text.\n"
         "- Format output as clean, spoken text — no title, no headings, just the script"
     )
     try:
