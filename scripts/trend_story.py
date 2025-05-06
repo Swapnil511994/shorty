@@ -3,6 +3,7 @@ import subprocess
 import pandas as pd
 from datetime import datetime
 import requests
+import re
 
 # ===== Logging =====
 def print_status(msg, status="info"):
@@ -23,10 +24,9 @@ except Exception as e:
     GNEWS_API_KEY = ""
 
 GNEWS_ENDPOINT = "https://gnews.io/api/v4/top-headlines"
-
 os.makedirs(STORY_DIR, exist_ok=True)
 
-# ===== Fetch US Headlines using GNews (title + description) =====
+# ===== Fetch US Headlines =====
 def fetch_us_headlines(max_results=10):
     params = {
         "lang": "en",
@@ -34,7 +34,6 @@ def fetch_us_headlines(max_results=10):
         "token": GNEWS_API_KEY,
         "max": max_results
     }
-
     try:
         response = requests.get(GNEWS_ENDPOINT, params=params)
         response.raise_for_status()
@@ -50,19 +49,18 @@ def fetch_us_headlines(max_results=10):
         print_status(f"GNews fetch error: {e}", "error")
         return []
 
-# ===== Story Generator using local Mistral =====
-def generate_story(prompt):
-    # system_prompt = (
-    #     "You are an expert content creator who writes short, informative, and engaging scripts for YouTube Shorts.\n"
-    #     "Use the headline and description provided to explain the news clearly and concisely.\n"
-    #     "Avoid adding descriptors like [Music], (Narrator), etc.\n"
-    #     "The script must be under 200 words and understandable by a general audience.\n"
-    #     "End the script with one of the following:\n"
-    #     "- 'Subscribe for more!'\n"
-    #     "- 'Like, share, and subscribe!'\n"
-    #     "Format the script naturally for voiceover narration."
-    # )
+# ===== Clean Story =====
+def clean_story(text):
+    text = re.sub(r'[\U00010000-\U0010ffff]', '', text, flags=re.UNICODE)  # Emojis
+    text = re.sub(r'#\w+', '', text)  # Hashtags
+    text = re.sub(r'[\[\(].*?[\]\)]', '', text)  # [Music], (Narrator)
+    text = re.sub(r'^(title|script|heading)[:\-–]\s*', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'\n{2,}', '\n', text)
+    text = re.sub(r' +', ' ', text)
+    return text.strip()
 
+# ===== Story Generator =====
+def generate_story(prompt):
     system_prompt = (
         "You are an expert content creator who writes short, educational, and engaging scripts for YouTube Shorts.\n"
         "Your goal is to explain news topics clearly and in a way that drives algorithmic reach.\n"
@@ -74,12 +72,10 @@ def generate_story(prompt):
         "Rules:\n"
         "- The script must be under 200 words\n"
         "- Write naturally for voice narration\n"
-        "- Do NOT include any descriptors like Here's a YouTube Shorts script about, [Music], (Narrator), no hastags, etc.\n"
+        "- Do NOT include any descriptors like [Music], (Narrator), no hashtags, etc.\n"
         "- Do NOT include any emojis in the output.\n"
         "- Format output as clean, spoken text — no title, no headings, just the script"
     )
-
-
     try:
         result = subprocess.run(
             ['ollama', 'run', MODEL_NAME, system_prompt + "\n\nPROMPT: " + prompt],
@@ -89,10 +85,8 @@ def generate_story(prompt):
             encoding='utf-8',
             timeout=120
         )
-
         if result.returncode != 0:
             raise Exception(result.stderr.strip())
-
         return result.stdout.strip()
     except Exception as e:
         raise Exception(f"Model generation error: {e}")
@@ -127,12 +121,13 @@ def process_csv():
         print_status(f"📚 Generating script for ID {story_id}\n{raw_prompt}", "progress")
         try:
             story = generate_story(raw_prompt)
+            cleaned_story = clean_story(story)
 
             path = os.path.join(STORY_DIR, f"story_{story_id}.txt")
             with open(path, 'w', encoding='utf-8') as f:
-                f.write(story)
+                f.write(cleaned_story)
 
-            df.at[idx, 'StoryText'] = story
+            df.at[idx, 'StoryText'] = cleaned_story
             df.at[idx, 'StoryStatus'] = "Completed"
             print_status(f"✅ Script generated and saved for ID {story_id}", "success")
         except Exception as e:
