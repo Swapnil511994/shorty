@@ -1,0 +1,28 @@
+# Ignore everything in env folders
+venv/*
+xtts_env/*
+whisperx_env/*
+video_env/*
+opencv_video_env/*
+temp/*
+
+# But include their requirements.txt files
+!venv/requirements.txt
+!xtts_env/requirements.txt
+!whisperx_env/requirements.txt
+!video_env/requirements.txt
+!opencv_video_env/requirements.txt
+
+# Ignore audio and output
+audio/narrations/
+output/
+
+# Ignore secrets and credentials
+scripts/client_secrets.json
+client_secret_467826760335-3q1n6l8jfbp1tgcg1suu3c9cdpgmlqe7.apps.googleusercontent.com.json
+/client_secrets.json
+/token.pickle
+
+# Ignore temp video files
+/video_*TEMP_*.mp4
+temp
