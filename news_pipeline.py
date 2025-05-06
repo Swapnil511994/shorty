@@ -8,7 +8,7 @@ PY_VIDEO = os.path.abspath("video_env/Scripts/python.exe")
 WHISPERX_ENV = os.path.abspath("whisperx_env/Scripts/python.exe")
 
 steps = [
-    ("Generating Trend Stories", PY_VIDEO, "scripts/trend_story.py"),
+    ("Generating Trend Stories", PY_VIDEO, "scripts/latest_news.py"),
     ("Generating Metadata", PY_VIDEO, "scripts/generate_metadata_from_story.py"),
     ("Generating Audio", XTTS_VENV, "scripts/generate_xtts_narration.py"),
     # ("Generating Subtitles", WHISPERX_ENV, "scripts/create_ai_subtitles.py"),

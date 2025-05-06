@@ -14,7 +14,7 @@ temp/*
 !opencv_video_env/requirements.txt
 
 # Ignore audio and output
-audio/narrations/
+# audio/narrations/
 output/
 
 # Ignore secrets and credentials
