@@ -299,7 +299,7 @@ def generate_subtitle(txt):
     return TextClip(
         txt,
         font='Arial-Bold',
-        fontsize=100,
+        fontsize=90,
         color='white',
         stroke_color='black',
         stroke_width=3,
