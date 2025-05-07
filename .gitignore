@@ -16,6 +16,9 @@ temp/*
 # Ignore audio and output
 # audio/narrations/
 output/
+stories/
+audio/
+subtitles/
 
 # Ignore secrets and credentials
 scripts/client_secrets.json

@@ -1,24 +1,32 @@
 1
-00:00:00,031 --> 00:00:08,048
-Did you know that despite President Trump’s recent comments downplaying tariff negotiations, his officials are set to meet with Chinese counterparts on trade matters?
+00:00:00,031 --> 00:00:00,592
+Did you know?
 
 2
-00:00:08,708 --> 00:00:13,880
-This development is crucial as it sheds light on the ongoing trade relations between the US and China.
+00:00:01,332 --> 00:00:09,480
+China just cut its interest rates in an effort to boost its economy, which has been struggling due the ongoing trade war with the United States.
 
 3
-00:00:14,420 --> 00:00:20,452
-These talks could mean a potential resolution to the prolonged trade dispute between these two economic powerhouses.
+00:00:10,180 --> 00:00:17,007
+This move is significant because it signals China’s willingness to take action to stimulate growth amidst increasing economic pressures.
 
 4
-00:00:20,432 --> 00:00:27,928
-A deal might bring relief to American businesses and consumers, who have been impacted by tariffs, on goods imported from China.
+00:00:17,728 --> 00:00:19,070
+So what does this mean for you?
 
 5
-00:00:28,571 --> 00:00:32,899
-Stay tuned for updates, as we continue to monitor this evolving situation.
+00:00:19,751 --> 00:00:28,839
+Well, lower interest rates often lead to cheaper borrowing costs, which can encourage businesses to invest and consumers to spend more.
 
 6
-00:00:33,542 --> 00:00:37,850
-Don’t forget to like, share and subscribe for more insights into global trade news.
+00:00:28,820 --> 00:00:34,813
+This could potentially have a ripple effect worldwide as China is one of the world’s largest economies.
+
+7
+00:00:35,533 --> 00:00:38,460
+Stay tuned for more updates on this developing story.
+
+8
+00:00:39,142 --> 00:00:44,213
+Remember to like, share and subscribe for daily updates on global news and their impacts?
 
