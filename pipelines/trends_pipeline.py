@@ -26,10 +26,10 @@ PY_VIDEO = os.path.abspath("video_env/Scripts/python.exe")         # Video gener
 # === Step-by-step Commands ===
 pipeline_steps = [
     (
-        "📰 Fetching News & Generating Stories",
+        "📰 Fetching Trending News & Generating Stories",
         PY_VENV,
-        "pipelines/custom_scripts/news.py",
-        ["--csv", CSV_PATH, "--news_limit", NEWS_LIMIT, "--regions", REGIONS, "--query", QUERY]
+        "pipelines/custom_scripts/trends.py",
+        ["--csv", CSV_PATH]
     ),
     (
         "🧠 Generating Metadata",

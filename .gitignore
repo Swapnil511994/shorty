@@ -4,6 +4,7 @@ xtts_env/*
 whisperx_env/*
 video_env/*
 opencv_video_env/*
+genai_env/*
 temp/*
 
 # But include their requirements.txt files
@@ -11,7 +12,7 @@ temp/*
 !xtts_env/requirements.txt
 !whisperx_env/requirements.txt
 !video_env/requirements.txt
-!opencv_video_env/requirements.txt
+!genai_env/requirements.txt
 
 # Ignore audio and output
 # audio/narrations/
