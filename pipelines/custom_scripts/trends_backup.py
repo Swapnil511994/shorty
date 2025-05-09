@@ -1,9 +1,9 @@
 import os
+import re
 import subprocess
+import requests
 import pandas as pd
 from datetime import datetime
-import requests
-import re
 import argparse
 
 # ===== Logging =====
@@ -13,18 +13,11 @@ def print_status(msg, status="info"):
 
 # ===== Argument Parser =====
 parser = argparse.ArgumentParser(description="Generate educational stories from news or prompts.")
-parser.add_argument("--csv", type=str, help="Path to input CSV", default=os.getenv("CSV_PATH", "data/input.csv"))
-parser.add_argument("--news_limit", type=int, help="Number of news items to fetch", default=10)
-parser.add_argument("--regions", type=str, help="Comma-separated list of country codes (e.g., 'us,in')", default="in")
-parser.add_argument("--query", type=str, help="Search query for GNews", default=None)
+parser.add_argument("--csv", type=str, help="Path to input CSV", default=os.getenv("CSV_PATH", "pipelines/input.csv"))
 args = parser.parse_args()
-
 CSV_PATH = args.csv
-NEWS_LIMIT = args.news_limit
-REGIONS = [r.strip() for r in args.regions.split(",") if r.strip()]
-QUERY = args.query
 
-# ===== Config =====
+# ===== Configuration =====
 STORY_DIR = "stories/generated"
 MODEL_NAME = "mistral"
 
@@ -36,43 +29,43 @@ except Exception as e:
     print_status(f"❌ Failed to read GNews API key: {e}", "error")
     GNEWS_API_KEY = ""
 
-GNEWS_ENDPOINT = "https://gnews.io/api/v4/search"
+GNEWS_ENDPOINT = "https://gnews.io/api/v4/top-headlines"
 os.makedirs(STORY_DIR, exist_ok=True)
 
-# ===== Fetch News =====
-def fetch_news(country):
-    if not QUERY:
-        print_status("⚠️ QUERY is not set. Skipping news fetch.", "warning")
-        return []
-    url = f"{GNEWS_ENDPOINT}?q={QUERY}&lang=en&country={country}&max={NEWS_LIMIT}&apikey={GNEWS_API_KEY}"
-    print_status(f"🔍 Fetching news for region '{country}' via URL: {url}", "progress")
+# ===== Fetch US Headlines =====
+def fetch_us_headlines(max_results=10):
+    params = {
+        "lang": "en",
+        "country": "us",
+        "token": GNEWS_API_KEY,
+        "max": max_results
+    }
     try:
-        response = requests.get(url)
+        response = requests.get(GNEWS_ENDPOINT, params=params)
         response.raise_for_status()
         data = response.json()
         return [
             {
-                "title": article.get("title", ""),
-                "description": article.get("description", ""),
-                "image": article.get("image", ""),
-                "url": article.get("url", "")
-            } for article in data.get("articles", []) if article.get("title")
+                "title": article["title"],
+                "description": article.get("description", "")
+            }
+            for article in data.get("articles", [])
         ]
     except Exception as e:
-        print_status(f"Failed to fetch news for {country}: {e}", "error")
+        print_status(f"GNews fetch error: {e}", "error")
         return []
 
-# ===== Clean Story Text =====
+# ===== Clean Story =====
 def clean_story(text):
-    text = re.sub(r'[\U00010000-\U0010ffff]', '', text, flags=re.UNICODE)
-    text = re.sub(r'#\w+', '', text)
-    text = re.sub(r'[\[\(].*?[\]\)]', '', text)
+    text = re.sub(r'[\U00010000-\U0010ffff]', '', text, flags=re.UNICODE)  # Emojis
+    text = re.sub(r'#\w+', '', text)  # Hashtags
+    text = re.sub(r'[\[\(].*?[\]\)]', '', text)  # [Music], (Narrator)
     text = re.sub(r'^(title|script|heading)[:\-–]\s*', '', text, flags=re.IGNORECASE)
     text = re.sub(r'\n{2,}', '\n', text)
     text = re.sub(r' +', ' ', text)
     return '\n'.join(line.strip() for line in text.splitlines()).strip()
 
-# ===== Generate Story =====
+# ===== Story Generator =====
 def generate_story(prompt):
     system_prompt = (
         "You are an expert content creator who writes short, educational, and engaging scripts for YouTube Shorts.\n"
@@ -106,56 +99,57 @@ def generate_story(prompt):
         raise Exception(f"Model generation error: {e}")
 
 # ===== Main Process =====
-def process_news():
-    print_status("🚀 Starting content generation from GNews", "progress")
+def process_csv():
+    print_status("🚀 Starting Step 1: Content Generation", "progress")
     try:
         df = pd.read_csv(CSV_PATH)
+        print_status(f"Loaded CSV with {len(df)} rows", "success")
     except Exception:
-        df = pd.DataFrame(columns=["ID", "Prompt", "ImageURL", "StoryText", "StoryStatus"])
+        df = pd.DataFrame(columns=["ID", "Prompt", "StoryText", "StoryStatus"])
 
-    for region in REGIONS:
-        for article in fetch_news(region):
-            prompt = f"{article['title']}\n\n{article['description']}"
-            image = article.get("image", "")
-            story_id = df["ID"].max() + 1 if not df.empty else 1
-            df = pd.concat([
-                df,
-                pd.DataFrame([{ "ID": story_id, "Prompt": prompt, "ImageURL": image, "StoryText": "", "StoryStatus": "", "NewsUrl": article["url"] }])
-            ], ignore_index=True)
+    if df.empty or df["Prompt"].dropna().empty:
+        print_status("No prompts found — fetching US news headlines from GNews", "info")
+        headlines = fetch_us_headlines(max_results=10)
+        df = pd.DataFrame([{
+            "ID": i,
+            "Prompt": f"{item['title']}\n\n{item['description']}",
+            "StoryText": "",
+            "StoryStatus": ""
+        } for i, item in enumerate(headlines)])
 
     for idx, row in df.iterrows():
         if str(row.get("StoryStatus", "")).lower() == "completed":
+            print_status(f"Skipping row {idx}: already completed", "info")
             continue
 
-        prompt = str(row.get("Prompt", "")).strip()
-        if not prompt:
-            continue
-
+        raw_prompt = str(row.get("Prompt", "")).strip()
         story_id = row.get("ID", idx)
+
+        print_status(f"📚 Generating script for ID {story_id}\n{raw_prompt}", "progress")
         try:
-            story = generate_story(prompt)
-            cleaned = clean_story(story)
+            story = generate_story(raw_prompt)
+            cleaned_story = clean_story(story)
 
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"story_{story_id}_{timestamp}.txt"
             story_path = os.path.join(STORY_DIR, filename)
             with open(story_path, 'w', encoding='utf-8') as f:
-                f.write(cleaned)
+                f.write(cleaned_story)
 
-            df.at[idx, "StoryText"] = cleaned
-            df.at[idx, "StoryStatus"] = "Completed"
-            df.at[idx, "StoryPath"] = story_path
-            print_status(f"✅ Story {story_id} generated and saved", "success")
+            df.at[idx, 'StoryText'] = cleaned_story
+            df.at[idx, 'StoryStatus'] = "Completed"
+            df.at[idx, 'StoryPath'] = story_path
+            print_status(f"✅ Script generated and saved for ID {story_id}", "success")
         except Exception as e:
-            df.at[idx, "StoryStatus"] = f"Failed: {str(e)}"
-            print_status(f"❌ Failed to generate story {story_id}: {e}", "error")
+            df.at[idx, 'StoryStatus'] = f"Failed: {str(e)}"
+            print_status(f"❌ Failed to generate script for ID {story_id}: {e}", "error")
 
     try:
         df.to_csv(CSV_PATH, index=False)
-        print_status("✅ CSV updated with new entries", "success")
+        print_status("✅ CSV updated", "success")
     except Exception as e:
-        print_status(f"❌ Failed to save CSV: {e}", "error")
+        print_status(f"❌ Failed to save CSV: {str(e)}", "error")
 
 if __name__ == "__main__":
-    process_news()
-    print_status("🌟 All news processed.", "success")
+    process_csv()
+    print_status("🏁 Step 1 complete", "success")
