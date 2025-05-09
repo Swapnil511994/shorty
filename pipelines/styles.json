@@ -1,0 +1,21 @@
+{
+    "cyberpunk": {
+      "style_prompt": "futuristic neon skyline, glowing HUDs, cybernetic implants, dark foggy lighting, by Simon Stålenhag",
+      "lora": {
+        "repo": "Jsnlv/cyberpunk-style-lora-sdxl",
+        "filename": "pytorch_lora_weights.safetensors",
+        "strength": 0.6
+      }
+    },
+    "infographic": {
+      "style_prompt": "top-down holographic map, digital overlays, glowing nodes and links, blueprint aesthetic",
+      "use_controlnet": true
+    },
+    "cinematic": {
+      "style_prompt": "dramatic lighting, photorealism, shallow depth of field, high contrast shadows, 8K"
+    },
+    "realism": {
+      "style_prompt": "hyperrealistic skin, soft light, detailed textures, cinematic rendering"
+    }
+  }
+  

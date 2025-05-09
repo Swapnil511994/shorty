@@ -6,7 +6,7 @@ import os
 parser = argparse.ArgumentParser(description="Run the YouTube Shorts generation pipeline.")
 parser.add_argument("--csv", type=str, default="pipelines/datum.csv", help="Path to input CSV")
 parser.add_argument("--news_limit", type=str, default="10", help="Number of news items to fetch")
-parser.add_argument("--regions", type=str, default="in,us", help="Comma-separated country codes")
+parser.add_argument("--regions", type=str, default="in", help="Comma-separated country codes")
 parser.add_argument("--query", type=str, default="india pakistan war", help="Search query for GNews")
 parser.add_argument("--upload", action="store_true", help="Include this flag to upload videos to YouTube")
 args = parser.parse_args()
