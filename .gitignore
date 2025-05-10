@@ -26,6 +26,7 @@ scripts/client_secrets.json
 client_secret_467826760335-3q1n6l8jfbp1tgcg1suu3c9cdpgmlqe7.apps.googleusercontent.com.json
 /client_secrets.json
 /token.pickle
+credentials.txt
 
 # Ignore temp video files
 /video_*TEMP_*.mp4
