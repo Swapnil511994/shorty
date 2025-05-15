@@ -94,6 +94,12 @@ def run_upload_loop(queue_csv):
             if str(row.get("UploadStatus", "")).lower() == "completed":
                 continue
 
+            if str(row.get("UploadStatus", "")).lower() == "failed":
+                continue
+
+            if str(row.get("UploadStatus", "")).lower().startswith("error"):
+                continue
+
             video_path = str(row.get("VideoPath", "")).strip()
             title = str(row.get("Title", "")).strip()
             desc = str(row.get("Description", "")).strip()

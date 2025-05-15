@@ -9,6 +9,7 @@ DELETE_PATHS = {
     "metadata": "stories/metadata",
     "audio": "audio/narrations",
     "videos": "output/final_videos",
+    "subtitles": "subtitles/srt",
 }
 
 def delete_files(folder_path):
@@ -43,6 +44,7 @@ def main():
         delete_files(DELETE_PATHS["metadata"])
     if args.delete_audio:
         delete_files(DELETE_PATHS["audio"])
+        delete_files(DELETE_PATHS["subtitles"])
     if args.delete_videos:
         delete_files(DELETE_PATHS["videos"])
 

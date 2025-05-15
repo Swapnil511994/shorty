@@ -28,7 +28,7 @@ def generate_metadata(story_text):
         "Given a short video script, generate metadata optimized for YouTube and Google search.\n"
         "Return the result in exactly this format:\n\n"
         "[TITLE]\n"
-        "A punchy, curiosity-driven title (max 15 words) with hastags relevant to story\n"
+        "A punchy, curiosity-driven title (max 15 words)\n"
         "[DESCRIPTION]\n"
         "A two-paragraph teaser that ends with a question mark and includes at least 1-5 keyword and relevant hashtags\n"
         "[TAGS]\n"
