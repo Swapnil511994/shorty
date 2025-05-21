@@ -3,7 +3,7 @@ import re
 import subprocess
 import requests
 import pandas as pd
-from datetime import datetime, timedelta
+from datetime import datetime
 import argparse
 
 # ===== Logging =====
@@ -19,7 +19,7 @@ CSV_PATH = args.csv
 
 # ===== Configuration =====
 STORY_DIR = "stories/generated"
-MODEL_NAME = "mistral"
+MODEL_NAME = "gemma"
 
 # Load API key securely
 try:
@@ -34,14 +34,11 @@ os.makedirs(STORY_DIR, exist_ok=True)
 
 # ===== Fetch US Headlines =====
 def fetch_us_headlines(max_results=10):
-    twelve_hours_ago = datetime.utcnow() - timedelta(hours=12)
-    from_timestamp = twelve_hours_ago.strftime("%Y-%m-%dT%H:%M:%SZ")
     params = {
         "lang": "en",
         "country": "us",
         "token": GNEWS_API_KEY,
-        "max": max_results,
-        "from": from_timestamp,
+        "max": max_results
     }
     try:
         response = requests.get(GNEWS_ENDPOINT, params=params)
@@ -71,20 +68,17 @@ def clean_story(text):
 # ===== Story Generator =====
 def generate_story(prompt):
     system_prompt = (
-        "You are an expert content creator who writes short, educational, and engaging scripts for YouTube Shorts.\n"
-        "Your goal is to explain news topics clearly and in a way that drives algorithmic reach.\n"
-        "Use the provided headline and description to:\n"
-        "- Clearly explain what the news is about\n"
-        "- Add value by saying what it means or why it matters\n"
-        "- Use terms like 'explained', 'what it means', or 'did you know' to increase search discoverability\n"
-        "- End the script with a CTA: 'Like, share, and subscribe!'\n\n"
-        "Rules:\n"
-        "- The script must be under 200 words\n"
-        "- Write naturally for voice narration\n"
-        "- Do NOT include any descriptors like [Music], (Narrator), no hashtags, etc.\n"
-        "- Do NOT include any emojis in the output.\n"
-        "- Do NOT start with Here's your YouTube Shorts script: or any other informative text.\n"
-        "- Format output as clean, spoken text — no title, no headings, just the script"
+        "आप एक विशेषज्ञ सामग्री निर्माता हैं जो YouTube Shorts के लिए छोटे, शैक्षिक और आकर्षक स्क्रिप्ट लिखते हैं।\n"
+        "आपका लक्ष्य समाचार विषयों को स्पष्ट रूप से और एल्गोरिदम तक पहुंच को बढ़ावा देने के तरीके से समझाना है।\n"
+        "प्रदान किए गए हेडलाइन और विवरण का उपयोग करके:\n"
+        "- समाचार क्या है यह स्पष्ट करें\n"
+        "- इसका क्या अर्थ है या यह क्यों महत्वपूर्ण है, यह बताएं\n"
+        "- स्क्रिप्ट के अंत में CTA जोड़ें: 'लाइक करें, शेयर करें और सब्सक्राइब करें!'\n\n"
+        "नियम:\n"
+        "- स्क्रिप्ट 200 शब्दों से कम होनी चाहिए\n"
+        "- इसे नेचुरल तरीके से लिखें जिससे वॉयसओवर अच्छा लगे\n"
+        "- कोई हैशटैग, इमोजी या वर्णनात्मक लेबल शामिल न करें\n"
+        "- आउटपुट में केवल बोलचाल की भाषा होनी चाहिए, शीर्षक या हेडिंग नहीं\n"
     )
     try:
         result = subprocess.run(

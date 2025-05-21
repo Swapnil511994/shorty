@@ -8,13 +8,14 @@ from datetime import datetime
 # ===== Argument Parser =====
 parser = argparse.ArgumentParser(description="Generate voice narration from stories using XTTS.")
 parser.add_argument("--csv", type=str, help="Path to input CSV", default=os.getenv("CSV_PATH", "data/input.csv"))
+parser.add_argument("--sample", type=str, help="Path to input sample audio", default=os.getenv("AUDIO_PATH", "audio/sample/sample.wav"))
 args = parser.parse_args()
 
 # ===== Config =====
 CSV_PATH = args.csv
 STORY_DIR = "stories/generated"
 OUTPUT_DIR = "audio/narrations"
-SAMPLE_PATH = "audio/sample/sample.wav"
+SAMPLE_PATH = args.sample
 MODEL_NAME = "tts_models/multilingual/multi-dataset/xtts_v2"
 LANGUAGE = "en"
 DEVICE = "cuda"

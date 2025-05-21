@@ -1,17 +1,15 @@
 import os
 import subprocess
 import pandas as pd
-from datetime import datetime,timedelta
+from datetime import datetime
 import requests
 import re
 import argparse
 
-# ===== Logging =====
 def print_status(msg, status="info"):
     icons = {"info": "ℹ️", "success": "✅", "warning": "⚠️", "error": "❌", "progress": "🔄"}
     print(f"{datetime.now().strftime('%H:%M:%S')} {icons.get(status, '')} {msg}")
 
-# ===== Argument Parser =====
 parser = argparse.ArgumentParser(description="Generate educational stories from news or prompts.")
 parser.add_argument("--csv", type=str, help="Path to input CSV", default=os.getenv("CSV_PATH", "data/input.csv"))
 parser.add_argument("--news_limit", type=int, help="Number of news items to fetch", default=10)
@@ -24,11 +22,9 @@ NEWS_LIMIT = args.news_limit
 REGIONS = [r.strip() for r in args.regions.split(",") if r.strip()]
 QUERY = args.query
 
-# ===== Config =====
 STORY_DIR = "stories/generated"
-MODEL_NAME = "mistral"
+MODEL_NAME = "gemma"
 
-# Load API key securely
 try:
     with open("gnews_api.txt", "r") as f:
         GNEWS_API_KEY = f.read().strip()
@@ -39,15 +35,11 @@ except Exception as e:
 GNEWS_ENDPOINT = "https://gnews.io/api/v4/search"
 os.makedirs(STORY_DIR, exist_ok=True)
 
-# ===== Fetch News =====
 def fetch_news(country):
     if not QUERY:
         print_status("⚠️ QUERY is not set. Skipping news fetch.", "warning")
         return []
-    twelve_hours_ago = datetime.utcnow() - timedelta(hours=12)
-    from_timestamp = twelve_hours_ago.strftime("%Y-%m-%d%H:%M:%SZ")
-
-    url = f"{GNEWS_ENDPOINT}?q={QUERY}&lang=en&country={country}&max={NEWS_LIMIT}&apikey={GNEWS_API_KEY}&from={from_timestamp}"
+    url = f"{GNEWS_ENDPOINT}?q={QUERY}&lang=hi&country={country}&max={NEWS_LIMIT}&apikey={GNEWS_API_KEY}"
     print_status(f"🔍 Fetching news for region '{country}' via URL: {url}", "progress")
     try:
         response = requests.get(url)
@@ -65,7 +57,6 @@ def fetch_news(country):
         print_status(f"Failed to fetch news for {country}: {e}", "error")
         return []
 
-# ===== Clean Story Text =====
 def clean_story(text):
     text = re.sub(r'[\U00010000-\U0010ffff]', '', text, flags=re.UNICODE)
     text = re.sub(r'#\w+', '', text)
@@ -75,27 +66,25 @@ def clean_story(text):
     text = re.sub(r' +', ' ', text)
     return '\n'.join(line.strip() for line in text.splitlines()).strip()
 
-# ===== Generate Story =====
 def generate_story(prompt):
     system_prompt = (
-        "You are an expert content creator who writes short, educational, and engaging scripts for YouTube Shorts.\n"
-        "Your goal is to explain news topics clearly and in a way that drives algorithmic reach.\n"
-        "Use the provided headline and description to:\n"
-        "- Clearly explain what the news is about\n"
-        "- Add value by saying what it means or why it matters\n"
-        "- Use terms like 'explained', 'what it means', or 'did you know' to increase search discoverability\n"
-        "- End the script with a CTA: 'Like, share, and subscribe!'\n\n"
-        "Rules:\n"
-        "- The script must be under 200 words\n"
-        "- Write naturally for voice narration\n"
-        "- Do NOT include any descriptors like [Music], (Narrator), no hashtags, etc.\n"
-        "- Do NOT include any emojis in the output.\n"
-        "- Do NOT start with Here's your YouTube Shorts script: or any other informative text.\n"
-        "- Format output as clean, spoken text — no title, no headings, just the script"
+        "आप एक विशेषज्ञ सामग्री निर्माता हैं जो YouTube Shorts के लिए छोटे, शैक्षिक और आकर्षक स्क्रिप्ट लिखते हैं।\n"
+        "आपका लक्ष्य समाचार विषयों को स्पष्ट रूप से और एल्गोरिदम तक पहुंच को बढ़ावा देने के तरीके से समझाना है।\n"
+        "प्रदान किए गए हेडलाइन और विवरण का उपयोग करके:\n"
+        "- समाचार क्या है यह स्पष्ट करें\n"
+        "- इसका क्या अर्थ है या यह क्यों महत्वपूर्ण है, यह बताएं\n"
+        "- स्क्रिप्ट के अंत में CTA जोड़ें: 'लाइक करें, शेयर करें और सब्सक्राइब करें!'\n\n"
+        "नियम:\n"
+        "- स्क्रिप्ट 200 शब्दों से कम होनी चाहिए\n"
+        "- इसे नेचुरल तरीके से लिखें जिससे वॉयसओवर अच्छा लगे\n"
+        "- कोई हैशटैग, इमोजी या वर्णनात्मक लेबल शामिल न करें\n"
+        "- आउटपुट में केवल बोलचाल की भाषा होनी चाहिए, शीर्षक या हेडिंग नहीं\n"
     )
+
     try:
         result = subprocess.run(
-            ['ollama', 'run', MODEL_NAME, system_prompt + "\n\nPROMPT: " + prompt],
+            ['ollama', 'run', MODEL_NAME],
+            input=f"<|system|>\n{system_prompt}\n<|user|>\n{prompt}",
             text=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -108,7 +97,6 @@ def generate_story(prompt):
     except Exception as e:
         raise Exception(f"Model generation error: {e}")
 
-# ===== Main Process =====
 def process_news():
     print_status("🚀 Starting content generation from GNews", "progress")
     try:
