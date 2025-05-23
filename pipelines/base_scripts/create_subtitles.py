@@ -59,7 +59,7 @@ def write_srt_manual(segments, output_path):
 
 # ===== LOAD CSV =====
 try:
-    df = pd.read_csv(CSV_PATH)
+    df = pd.read_csv(CSV_PATH, encoding="utf-8")
     print_status(f"Loaded CSV with {len(df)} rows", "success")
 except Exception as e:
     print_status(f"Failed to read CSV: {str(e)}", "error")

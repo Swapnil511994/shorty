@@ -90,7 +90,8 @@ def generate_story(prompt):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             encoding='utf-8',
-            timeout=120
+            timeout=120,
+            errors="replace",
         )
         if result.returncode != 0:
             raise Exception(result.stderr.strip())

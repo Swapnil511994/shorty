@@ -89,7 +89,8 @@ def generate_story(prompt):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             encoding='utf-8',
-            timeout=120
+            timeout=120,
+            errors="replace",
         )
         if result.returncode != 0:
             raise Exception(result.stderr.strip())
@@ -100,7 +101,7 @@ def generate_story(prompt):
 def process_news():
     print_status("🚀 Starting content generation from GNews", "progress")
     try:
-        df = pd.read_csv(CSV_PATH)
+        df = pd.read_csv(CSV_PATH, encoding="utf-8")
     except Exception:
         df = pd.DataFrame(columns=["ID", "Prompt", "ImageURL", "StoryText", "StoryStatus"])
 

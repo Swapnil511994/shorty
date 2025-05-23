@@ -151,7 +151,7 @@ TASK:
     result = subprocess.run(
         ["ollama", "run", "llama3"],
         input=filtering_prompt,
-        capture_output=True, text=True, encoding='utf-8'
+        capture_output=True, text=True, encoding='utf-8', errors='replace'
     )
 
     ai_lines = [line.strip() for line in result.stdout.strip().split('\n') if line.strip()][:8]
@@ -213,7 +213,7 @@ FORMAT:
     creative_result = subprocess.run(
         ["ollama", "run", "llama3"],
         input=creative_prompt_request,
-        capture_output=True, text=True, encoding='utf-8'
+        capture_output=True, text=True, encoding='utf-8', errors='replace'
     )
 
     creative_prompts = []
@@ -251,7 +251,7 @@ def generate_images(prompt_groups, story_id, df, row_idx):
             
             subprocess.run([
                 hidream_python, "-m", "hdi1", group['prompt'],
-                "-m", "fast", "-r", RESOLUTION, "-o", output_path
+                "-m", "fast", "-r", RESOLUTION, "-o", output_path, errors='replace'
             ], check=True)
             
             image_paths.append(output_path)

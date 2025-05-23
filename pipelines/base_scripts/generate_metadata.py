@@ -47,7 +47,8 @@ def generate_metadata(story_text):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         encoding='utf-8',
-        timeout=120
+        timeout=120,
+        errors="replace",
     )
 
     if result.returncode != 0:
@@ -71,7 +72,7 @@ def validate_metadata(raw_text):
 def process_csv():
     print_status("🚀 Starting Step 2: Metadata Generation", "progress")
     try:
-        df = pd.read_csv(CSV_PATH)
+        df = pd.read_csv(CSV_PATH, encoding='utf-8')
         print_status(f"Loaded CSV with {len(df)} rows", "success")
     except Exception as e:
         print_status(f"❌ Failed to read CSV: {str(e)}", "error")

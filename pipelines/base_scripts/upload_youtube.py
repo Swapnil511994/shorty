@@ -75,7 +75,7 @@ def ensure_queue_csv(queue_csv):
         os.makedirs(os.path.dirname(queue_csv), exist_ok=True)
         pd.DataFrame(columns=REQUIRED_COLUMNS).to_csv(queue_csv, index=False)
     else:
-        df = pd.read_csv(queue_csv)
+        df = pd.read_csv(queue_csv, encoding="utf-8")
         for col in REQUIRED_COLUMNS:
             if col not in df.columns:
                 df[col] = ""
@@ -88,7 +88,7 @@ def run_upload_loop(queue_csv):
 
     while True:
         ensure_queue_csv(queue_csv)
-        df = pd.read_csv(queue_csv)
+        df = pd.read_csv(queue_csv,encoding="utf-8")
 
         for idx, row in df.iterrows():
             if str(row.get("UploadStatus", "")).lower() == "completed":

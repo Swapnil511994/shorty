@@ -44,7 +44,7 @@ def fetch_news(country):
     if not QUERY:
         print_status("⚠️ QUERY is not set. Skipping news fetch.", "warning")
         return []
-    twelve_hours_ago = datetime.utcnow() - timedelta(hours=12)
+    twelve_hours_ago = datetime.utcnow() - timedelta(hours=6)
     from_timestamp = twelve_hours_ago.strftime("%Y-%m-%d%H:%M:%SZ")
 
     url = f"{GNEWS_ENDPOINT}?q={QUERY}&lang=en&country={country}&max={NEWS_LIMIT}&apikey={GNEWS_API_KEY}&from={from_timestamp}"
@@ -100,7 +100,8 @@ def generate_story(prompt):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             encoding='utf-8',
-            timeout=120
+            timeout=120,
+            errors="replace",
         )
         if result.returncode != 0:
             raise Exception(result.stderr.strip())
@@ -112,7 +113,7 @@ def generate_story(prompt):
 def process_news():
     print_status("🚀 Starting content generation from GNews", "progress")
     try:
-        df = pd.read_csv(CSV_PATH)
+        df = pd.read_csv(CSV_PATH,encoding="utf-8")
     except Exception:
         df = pd.DataFrame(columns=["ID", "Prompt", "ImageURL", "StoryText", "StoryStatus"])
 

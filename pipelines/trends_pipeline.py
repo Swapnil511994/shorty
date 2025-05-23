@@ -25,30 +25,30 @@ PY_VIDEO = os.path.abspath("video_env/Scripts/python.exe")         # Video gener
 
 # === Step-by-step Commands ===
 pipeline_steps = [
-    # (
-    #     "📰 Fetching Trending News & Generating Stories",
-    #     PY_VENV,
-    #     "pipelines/custom_scripts/trends.py",
-    #     ["--csv", CSV_PATH]
-    # ),
-    # (
-    #     "🧠 Generating Metadata",
-    #     PY_VENV,
-    #     "pipelines/base_scripts/generate_metadata.py",
-    #     ["--csv", CSV_PATH]
-    # ),
-    # (
-    #     "🎙️ Generating Narration",
-    #     XTTS_VENV,
-    #     "pipelines/base_scripts//generate_narration.py",
-    #     ["--csv", CSV_PATH]
-    # ),
-    # (
-    #     "📝 Creating Subtitles",
-    #     WHISPERX_ENV,
-    #     "pipelines/base_scripts/create_subtitles.py",
-    #     ["--csv", CSV_PATH]
-    # ),
+    (
+        "📰 Fetching Trending News & Generating Stories",
+        PY_VENV,
+        "pipelines/custom_scripts/trends.py",
+        ["--csv", CSV_PATH]
+    ),
+    (
+        "🧠 Generating Metadata",
+        PY_VENV,
+        "pipelines/base_scripts/generate_metadata.py",
+        ["--csv", CSV_PATH]
+    ),
+    (
+        "🎙️ Generating Narration",
+        XTTS_VENV,
+        "pipelines/base_scripts//generate_narration.py",
+        ["--csv", CSV_PATH]
+    ),
+    (
+        "📝 Creating Subtitles",
+        WHISPERX_ENV,
+        "pipelines/base_scripts/create_subtitles.py",
+        ["--csv", CSV_PATH]
+    ),
     (
         "🎬 Generating Videos",
         PY_VIDEO,
@@ -69,7 +69,7 @@ if args.upload:
 # === Run Pipeline ===
 for label, python_exec, script_path, script_args in pipeline_steps:
     print(f"\n🚀 {label}")
-    result = subprocess.run([python_exec, script_path] + script_args)
+    result = subprocess.run([python_exec, script_path] + script_args,encoding='utf-8')
     if result.returncode != 0:
         print(f"❌ Failed at step: {label}")
         break

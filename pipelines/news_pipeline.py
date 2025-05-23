@@ -18,10 +18,10 @@ REGIONS = args.regions
 QUERY = args.query
 
 # === Python Executables ===
-PY_VENV = os.path.abspath("venv/Scripts/python.exe")               # General purpose
-XTTS_VENV = os.path.abspath("xtts_env/Scripts/python.exe")         # Text-to-Speech (XTTS)
-WHISPERX_ENV = os.path.abspath("whisperx_env/Scripts/python.exe")  # WhisperX subtitles
-PY_VIDEO = os.path.abspath("video_env/Scripts/python.exe")         # Video generation & upload
+PY_VENV = os.path.abspath("environments/venv/Scripts/python.exe")               # General purpose
+XTTS_VENV = os.path.abspath("environments/xtts_env/Scripts/python.exe")         # Text-to-Speech (XTTS)
+WHISPERX_ENV = os.path.abspath("environments/whisperx_env/Scripts/python.exe")  # WhisperX subtitles
+PY_VIDEO = os.path.abspath("environments/video_env/Scripts/python.exe")         # Video generation & upload
 
 # === Step-by-step Commands ===
 pipeline_steps = [
@@ -69,7 +69,7 @@ if args.upload:
 # === Run Pipeline ===
 for label, python_exec, script_path, script_args in pipeline_steps:
     print(f"\n🚀 {label}")
-    result = subprocess.run([python_exec, script_path] + script_args)
+    result = subprocess.run([python_exec, script_path] + script_args,encoding='utf-8')
     if result.returncode != 0:
         print(f"❌ Failed at step: {label}")
         break

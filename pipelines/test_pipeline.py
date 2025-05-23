@@ -63,7 +63,7 @@ pipeline_steps = [
 # === Run Pipeline ===
 for label, python_exec, script_path, script_args in pipeline_steps:
     print(f"\n🚀 {label}")
-    result = subprocess.run([python_exec, script_path] + script_args)
+    result = subprocess.run([python_exec, script_path] + script_args,encoding='utf-8')
     if result.returncode != 0:
         print(f"❌ Failed at step: {label}")
         break
