@@ -26,7 +26,12 @@ QUERY = args.query
 
 # ===== Config =====
 STORY_DIR = "stories/generated"
-MODEL_NAME = "mistral"
+# MODEL_NAME = "mistral"
+# MODEL_NAME = "granite3.3:8b"
+# MODEL_NAME = "qwen3:32b"
+# MODEL_NAME = "gemma3:27b"
+# MODEL_NAME = "mistral:7b"
+MODEL_NAME = "deepseek-r1:32b"
 
 # Load API key securely
 try:
@@ -44,8 +49,8 @@ def fetch_news(country):
     if not QUERY:
         print_status("⚠️ QUERY is not set. Skipping news fetch.", "warning")
         return []
-    twelve_hours_ago = datetime.utcnow() - timedelta(hours=6)
-    from_timestamp = twelve_hours_ago.strftime("%Y-%m-%d%H:%M:%SZ")
+    twelve_hours_ago = datetime.utcnow() - timedelta(hours=48)
+    from_timestamp = twelve_hours_ago.strftime("%Y-%m-%dT%H:%M:%SZ")
 
     url = f"{GNEWS_ENDPOINT}?q={QUERY}&lang=en&country={country}&max={NEWS_LIMIT}&apikey={GNEWS_API_KEY}&from={from_timestamp}"
     print_status(f"🔍 Fetching news for region '{country}' via URL: {url}", "progress")
