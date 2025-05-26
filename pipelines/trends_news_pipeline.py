@@ -5,9 +5,9 @@ import os
 # === Argument Parser ===
 parser = argparse.ArgumentParser(description="Run the YouTube Shorts generation pipeline.")
 parser.add_argument("--csv", type=str, default="pipelines/datum.csv", help="Path to input CSV")
+parser.add_argument("--trends_csv", type=str, default="pipelines/trends.csv", help="Path to input CSV")
 parser.add_argument("--news_limit", type=str, default="10", help="Number of news items to fetch")
-parser.add_argument("--regions", type=str, default="in,us", help="Comma-separated country codes")
-parser.add_argument("--query", type=str, default="general", help="Search query for GNews")
+parser.add_argument("--regions", type=str, default="in", help="Comma-separated country codes")
 parser.add_argument("--upload", action="store_true", help="Include this flag to upload videos to YouTube")
 args = parser.parse_args()
 
@@ -15,7 +15,7 @@ args = parser.parse_args()
 CSV_PATH = args.csv
 NEWS_LIMIT = args.news_limit
 REGIONS = args.regions
-QUERY = args.query
+# QUERY = args.query
 
 # === Python Executables ===
 PY_VENV = os.path.abspath("environments/venv/Scripts/python.exe")               # General purpose
@@ -25,36 +25,36 @@ PY_VIDEO = os.path.abspath("environments/video_env/Scripts/python.exe")         
 
 # === Step-by-step Commands ===
 pipeline_steps = [
-    # (
-    #     "📰 Fetching Trending News & Generating Stories",
-    #     PY_VENV,
-    #     "pipelines/custom_scripts/trends.py",
-    #     ["--csv", CSV_PATH]
-    # ),
+    (
+        "📰 Fetching News & Generating Stories",
+        PY_VENV,
+        "pipelines/custom_scripts/gtrends.py",
+        ["--csv", CSV_PATH, "--news_limit", NEWS_LIMIT, "--trends_csv", args.trends_csv]
+    ),
     (
         "🧠 Generating Metadata",
         PY_VENV,
         "pipelines/base_scripts/generate_metadata.py",
         ["--csv", CSV_PATH]
     ),
-    # (
-    #     "🎙️ Generating Narration",
-    #     XTTS_VENV,
-    #     "pipelines/base_scripts//generate_narration.py",
-    #     ["--csv", CSV_PATH]
-    # ),
-    # (
-    #     "📝 Creating Subtitles",
-    #     WHISPERX_ENV,
-    #     "pipelines/base_scripts/create_subtitles.py",
-    #     ["--csv", CSV_PATH]
-    # ),
-    # (
-    #     "🎬 Generating Videos",
-    #     PY_VIDEO,
-    #     "pipelines/base_scripts/generate_video.py",
-    #     ["--csv", CSV_PATH]
-    # ),
+    (
+        "🎙️ Generating Narration",
+        XTTS_VENV,
+        "pipelines/base_scripts//generate_narration.py",
+        ["--csv", CSV_PATH]
+    ),
+    (
+        "📝 Creating Subtitles",
+        WHISPERX_ENV,
+        "pipelines/base_scripts/create_subtitles.py",
+        ["--csv", CSV_PATH]
+    ),
+    (
+        "🎬 Generating Videos",
+        PY_VIDEO,
+        "pipelines/base_scripts/generate_video.py",
+        ["--csv", CSV_PATH]
+    ),
 ]
 
 # === Conditionally Add Upload Step ===

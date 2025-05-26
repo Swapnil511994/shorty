@@ -19,7 +19,7 @@ CSV_PATH = args.csv
 
 # ===== Configuration =====
 STORY_DIR = "stories/generated"
-MODEL_NAME = "mistral"
+MODEL_NAME = "gemma3:27b"
 
 # Load API key securely
 try:
@@ -77,7 +77,7 @@ def generate_story(prompt):
         "- Clearly explain what the news is about\n"
         "- Add value by saying what it means or why it matters\n"
         "- Use terms like 'explained', 'what it means', or 'did you know' to increase search discoverability\n"
-        "- End the script with a CTA: 'Like, share, and subscribe!'\n\n"
+        "- End the script with an interesting CTA: 'Like, share, and subscribe!'\n\n"
         "Rules:\n"
         "- The script must be under 200 words\n"
         "- Write naturally for voice narration\n"

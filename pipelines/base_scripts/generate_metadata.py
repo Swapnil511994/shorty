@@ -13,7 +13,8 @@ args = parser.parse_args()
 # ===== Configuration =====
 CSV_PATH = args.csv
 METADATA_DIR = 'stories/metadata'
-MODEL_NAME = 'mistral'
+# MODEL_NAME = 'mistral'
+MODEL_NAME = "gemma3:27b"
 os.makedirs(METADATA_DIR, exist_ok=True)
 
 # ===== Logging =====
