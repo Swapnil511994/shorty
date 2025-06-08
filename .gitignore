@@ -35,3 +35,6 @@ credentials.txt
 # Ignore temp video files
 /video_*TEMP_*.mp4
 temp
+
+extra/token.pickle
+extra/credentials.txt
