@@ -25,36 +25,36 @@ PY_VIDEO = os.path.abspath("environments/video_env/Scripts/python.exe")         
 
 # === Step-by-step Commands ===
 pipeline_steps = [
-    # (
-    #     "📰 Fetching Trending News & Generating Stories",
-    #     PY_VENV,
-    #     "pipelines/custom_scripts/trends.py",
-    #     ["--csv", CSV_PATH]
-    # ),
+    (
+        "📰 Fetching Trending News & Generating Stories",
+        PY_VENV,
+        "pipelines/custom_scripts/trends.py",
+        ["--csv", CSV_PATH]
+    ),
     (
         "🧠 Generating Metadata",
         PY_VENV,
         "pipelines/base_scripts/generate_metadata.py",
         ["--csv", CSV_PATH]
     ),
-    # (
-    #     "🎙️ Generating Narration",
-    #     XTTS_VENV,
-    #     "pipelines/base_scripts//generate_narration.py",
-    #     ["--csv", CSV_PATH]
-    # ),
-    # (
-    #     "📝 Creating Subtitles",
-    #     WHISPERX_ENV,
-    #     "pipelines/base_scripts/create_subtitles.py",
-    #     ["--csv", CSV_PATH]
-    # ),
-    # (
-    #     "🎬 Generating Videos",
-    #     PY_VIDEO,
-    #     "pipelines/base_scripts/generate_video.py",
-    #     ["--csv", CSV_PATH]
-    # ),
+    (
+        "🎙️ Generating Narration",
+        XTTS_VENV,
+        "pipelines/base_scripts//generate_narration.py",
+        ["--csv", CSV_PATH]
+    ),
+    (
+        "📝 Creating Subtitles",
+        WHISPERX_ENV,
+        "pipelines/base_scripts/create_subtitles.py",
+        ["--csv", CSV_PATH]
+    ),
+    (
+        "🎬 Generating Videos",
+        PY_VIDEO,
+        "pipelines/base_scripts/generate_video.py",
+        ["--csv", CSV_PATH]
+    ),
 ]
 
 # === Conditionally Add Upload Step ===

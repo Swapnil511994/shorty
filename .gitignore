@@ -6,6 +6,8 @@ environments/video_env/*
 environments/opencv_video_env/*
 environments/hidream_env/*
 environments/temp/*
+environments/chatterbox_env/*
+environments/echomimic_env/*
 
 # But include their requirements.txt files
 !environments/venv/requirements.txt
@@ -13,6 +15,8 @@ environments/temp/*
 !environments/whisperx_env/requirements.txt
 !environments/video_env/requirements.txt
 !environments/hidream_env/requirements.txt
+!environments/chatterbox_env/requirements.txt
+!environments/echomimic_env/requirements.txt
 
 # Ignore audio and output
 # audio/narrations/
