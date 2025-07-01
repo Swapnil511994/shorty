@@ -8,6 +8,8 @@ environments/hidream_env/*
 environments/temp/*
 environments/chatterbox_env/*
 environments/echomimic_env/*
+environments/MultiTalk/*
+environments/multitalk_venv/*
 
 # But include their requirements.txt files
 !environments/venv/requirements.txt

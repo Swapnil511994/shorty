@@ -19,7 +19,7 @@ QUERY = args.query
 
 # === Python Executables ===
 PY_VENV = os.path.abspath("environments/venv/Scripts/python.exe")               # General purpose
-XTTS_VENV = os.path.abspath("environments/xtts_env/Scripts/python.exe")         # Text-to-Speech (XTTS)
+CHATTER_VENV = os.path.abspath("environments/chatterbox_env/Scripts/python.exe")         # Text-to-Speech (XTTS)
 WHISPERX_ENV = os.path.abspath("environments/whisperx_env/Scripts/python.exe")  # WhisperX subtitles
 PY_VIDEO = os.path.abspath("environments/video_env/Scripts/python.exe")         # Video generation & upload
 
@@ -37,16 +37,28 @@ pipeline_steps = [
         "pipelines/base_scripts/generate_metadata.py",
         ["--csv", CSV_PATH]
     ),
+    # (
+    #     "🎙️ Generating Narration",
+    #     XTTS_VENV,
+    #     "pipelines/base_scripts//generate_narration.py",
+    #     ["--csv", CSV_PATH]
+    # ),
+    # (
+    #     "📝 Creating Subtitles",
+    #     WHISPERX_ENV,
+    #     "pipelines/base_scripts/create_subtitles.py",
+    #     ["--csv", CSV_PATH]
+    # ),
     (
         "🎙️ Generating Narration",
-        XTTS_VENV,
-        "pipelines/base_scripts//generate_narration.py",
+        CHATTER_VENV,
+        "pipelines/base_scripts/generate_narration_chatter.py",
         ["--csv", CSV_PATH]
     ),
     (
         "📝 Creating Subtitles",
         WHISPERX_ENV,
-        "pipelines/base_scripts/create_subtitles.py",
+        "pipelines/base_scripts/create_subtitles_chunked.py",
         ["--csv", CSV_PATH]
     ),
     (
